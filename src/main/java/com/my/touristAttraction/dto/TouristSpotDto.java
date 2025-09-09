@@ -1,19 +1,13 @@
-package com.my.touristAttraction.entity;
+package com.my.touristAttraction.dto;
 
-import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Table(name = "tourist_spot")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TouristSpot {
+public class TouristSpotDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // DB용 PK
 
     private String title;           // 관광지명
@@ -35,8 +29,8 @@ public class TouristSpot {
     private String firstimage;      // 이미지1
     private String firstimage2;     // 이미지2
 
-    private Double mapx;            // 경도
-    private Double mapy;            // 위도
+    private String mapx;            // 경도
+    private String mapy;            // 위도
 
     private String createdtime;     // 생성일시
     private String modifiedtime;    // 수정일시
