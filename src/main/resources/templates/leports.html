@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${leports.title}">Leports Example</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background-color: #fff; color: #333; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; border-bottom: 1px solid #ddd; }
+    header h1 { font-size: 24px; }
+    header input { padding: 5px; width: 200px; }
+    .leports-info { display: flex; padding: 20px 30px; gap: 20px; }
+    .leports-image { width: 300px; height: 200px; background: #f0f0f0; object-fit: cover; }
+    .leports-details { flex: 1; }
+    .price { font-weight: bold; font-size: 20px; margin-top: 10px; }
+    nav { display: flex; gap: 30px; padding: 10px 30px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; background: #fafafa; }
+    .program-section { padding: 20px 30px; }
+    .program { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 15px 0; }
+    .program-img { width: 100px; height: 80px; background: #e0e0e0; margin-right: 15px; }
+    .program-info { flex: 1; }
+    .btn { background: #333; color: #fff; padding: 8px 16px; border: none; cursor: pointer; }
+    .reviews { display: flex; gap: 20px; padding: 20px 30px; }
+    .review { flex: 1; border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #fafafa; }
+    footer { text-align: center; padding: 20px; border-top: 1px solid #ddd; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Tour</h1>
+  <input type="text" placeholder="레포츠를 검색해보세요.">
+  <div>
+    <button>로그인/회원가입</button>
+  </div>
+</header>
+
+<section class="leports-info">
+  <!-- 레포츠 이미지 -->
+  <img th:src="${leports.firstimage}" alt="레포츠 이미지" class="leports-image">
+  <div class="leports-details">
+    <h2 th:text="${leports.title}">Leports Example</h2>
+    <p th:text="${leports.addr1} + ' | 전화: ' + ${leports.tel}">서울시 | 평점 ★★★</p>
+    <p class="price">50,000원</p> <!-- 가격 정보는 Leports 엔티티에 없으므로 임시 하드코딩 -->
+  </div>
+</section>
+
+<nav>
+  <span>주요 정보</span>
+  <span>프로그램</span>
+  <span>시설&서비스</span>
+  <span>리뷰</span>
+  <span>위치</span>
+</nav>
+
+<!-- 프로그램 섹션 (추후 Program 엔티티 연결 가능) -->
+<section class="program-section">
+  <div class="program">
+    <div class="program-img"></div>
+    <div class="program-info">
+      <h3>수상 레포츠 체험</h3>
+      <p>카약, 카누, 패들보드 등 다양한 수상 스포츠</p>
+    </div>
+    <button class="btn">예약 가능 여부 확인</button>
+  </div>
+</section>
+
+<nav>
+  <span>주요 정보</span>
+  <span>프로그램</span>
+  <span>시설&서비스</span>
+  <span>리뷰</span>
+  <span>위치</span>
+</nav>
+
+<!-- 리뷰 섹션 -->
+<section class="reviews">
+  <div class="review">
+    <h4>Nickname</h4>
+    <small>2025년 9월 9일</small>
+    <p>한강에서 카약 체험했는데 정말 재미있었어요!</p>
+  </div>
+</section>
+
+<footer>
+  <p>더 보기 ></p>
+</footer>
+</body>
+</html>
