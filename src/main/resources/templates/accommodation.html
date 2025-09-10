@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${accommodation.title}">Hotel Example</title>
+    <style>
+        /* 👉 기존 CSS 그대로 유지 */
+        body { margin: 0; font-family: Arial, sans-serif; background-color: #fff; color: #333; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; border-bottom: 1px solid #ddd; }
+        header h1 { font-size: 24px; }
+        header input { padding: 5px; width: 200px; }
+        .hotel-info { display: flex; padding: 20px 30px; gap: 20px; }
+        .hotel-image { width: 300px; height: 200px; background: #f0f0f0; object-fit: cover; }
+        .hotel-details { flex: 1; }
+        .price { font-weight: bold; font-size: 20px; margin-top: 10px; }
+        nav { display: flex; gap: 30px; padding: 10px 30px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; background: #fafafa; cursor: pointer; }
+        .room-section, .info-section, .facility-section, .review-section, .location-section { padding: 20px 30px; display: none; }
+        .room { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 15px 0; }
+        .room-img { width: 100px; height: 80px; background: #e0e0e0; margin-right: 15px; }
+        .room-info { flex: 1; }
+        .btn { background: #333; color: #fff; padding: 8px 16px; border: none; cursor: pointer; }
+        .reviews { display: flex; gap: 20px; }
+        .review { flex: 1; border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #fafafa; }
+        footer { text-align: center; padding: 20px; border-top: 1px solid #ddd; }
+
+        /* 클릭된 탭 강조 */
+        nav span.active {
+            font-weight: bold;
+            text-decoration: underline;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Tour</h1>
+    <input type="text" placeholder="여행지를 검색해보세요.">
+    <div>
+        <button>로그인/회원가입</button>
+    </div>
+</header>
+
+<section class="hotel-info">
+    <!-- 숙소 이미지 -->
+    <img th:src="${accommodation.firstimage}" alt="숙소 이미지" class="hotel-image">
+    <div class="hotel-details">
+        <h2 th:text="${accommodation.title}">Hotel Example</h2>
+        <p th:text="${accommodation.addr1} + ' ' + ${accommodation.addr2} + ' | 전화: ' + ${accommodation.tel}">제주시 | 평점 ★★★</p>
+        <p class="price">83,700원</p> <!-- 가격은 임시 -->
+    </div>
+</section>
+
+<!-- 탭 -->
+<nav>
+    <span data-target="info">주요 정보</span>
+    <span data-target="room">객실</span>
+    <span data-target="facility">시설&서비스</span>
+    <span data-target="review">리뷰</span>
+    <span data-target="location">위치</span>
+</nav>
+
+<!-- 섹션 -->
+<section class="info-section">
+    <h3>주요 정보</h3>
+    <p><strong>대분류:</strong> <span th:text="${accommodation.cat1}">B02</span></p>
+    <p><strong>중분류:</strong> <span th:text="${accommodation.cat2}">B0201</span></p>
+    <p><strong>소분류:</strong> <span th:text="${accommodation.cat3}">B02011600</span></p>
+    <p><strong>콘텐츠 ID:</strong> <span th:text="${accommodation.contentid}">2465071</span></p>
+    <p><strong>콘텐츠 타입:</strong> <span th:text="${accommodation.contenttypeid}">32</span></p>
+</section>
+
+<section class="room-section">
+    <div class="room">
+        <div class="room-img"></div>
+        <div class="room-info">
+            <h3>슈페리얼 싱글룸</h3>
+            <p>싱글베드 1개, 금연, 에어컨, 개인 욕실, 냉장고</p>
+        </div>
+        <button class="btn">예약 가능 여부 확인</button>
+    </div>
+</section>
+
+<section class="facility-section">
+    <h3>시설 & 서비스</h3>
+    <p>저작권 구분: <span th:text="${accommodation.cpyrhtDivCd}">Type3</span></p>
+    <p>지도 레벨: <span th:text="${accommodation.mlevel}">6</span></p>
+</section>
+
+<section class="review-section">
+    <h3>리뷰</h3>
+    <div class="reviews">
+        <div class="review">
+            <h4>Nickname</h4>
+            <small>2025년 9월 9일</small>
+            <p>명동호텔에서 가까운 편에 스타벅스도 있어서 쉬 재밌었던 것 같아요.</p>
+        </div>
+    </div>
+</section>
+
+<section class="location-section">
+    <h3>위치</h3>
+    <p>주소: <span th:text="${accommodation.addr1} + ' ' + ${accommodation.addr2}">제주시</span></p>
+    <p>지도 좌표: (<span th:text="${accommodation.mapx}">127.0</span>, <span th:text="${accommodation.mapy}">37.0</span>)</p>
+</section>
+
+<footer>
+    <p>더 보기 ></p>
+</footer>
+
+<script>
+    // 탭 클릭 시 섹션 전환
+    const tabs = document.querySelectorAll('nav span');
+    const sections = {
+        info: document.querySelector('.info-section'),
+        room: document.querySelector('.room-section'),
+        facility: document.querySelector('.facility-section'),
+        review: document.querySelector('.review-section'),
+        location: document.querySelector('.location-section')
+    };
+
+    function hideAllSections() {
+        Object.values(sections).forEach(sec => sec.style.display = 'none');
+    }
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // 탭 활성화
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            // 섹션 전환
+            hideAllSections();
+            const target = tab.getAttribute('data-target');
+            sections[target].style.display = 'block';
+        });
+    });
+
+    // 기본 활성화: 주요 정보
+    tabs[0].click();
+</script>
+</body>
+</html>

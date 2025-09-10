@@ -16,8 +16,3 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-
-# Tour API 설정 (spring 블록과는 별개)
-tour:
-  api:
-    key: a611fd5e397e6ff534ff96406fbca3f002b12ec79c63a8b93a4dee70a06d68f5
