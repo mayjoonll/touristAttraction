@@ -14,38 +14,31 @@ public class TouristSpot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // DB용 PK
+    private Long id;
 
-    private String title;           // 관광지명
-    private String addr1;           // 주소1
-    private String addr2;           // 주소2
-    private String zipcode;         // 우편번호
-    private String tel;             // 전화번호
-
-    private String areacode;        // 지역코드
-    private String sigungucode;     // 시군구코드
-
-    private String cat1;            // 대분류
-    private String cat2;            // 중분류
-    private String cat3;            // 소분류
-
-    private String contentid;       // 관광지 ID
-    private String contenttypeid;   // 콘텐츠 타입 ID
-
-    private String firstimage;      // 이미지1
-    private String firstimage2;     // 이미지2
-
-    private Double mapx;            // 경도
-    private Double mapy;            // 위도
-
-    private String createdtime;     // 생성일시
-    private String modifiedtime;    // 수정일시
-
-    private String cpyrhtDivCd;     // 저작권 구분
-    private String mlevel;          // 지도레벨
-    private String lDongRegnCd;     // 법정동 코드
-    private String lDongSignguCd;   // 법정동 시군구 코드
-    private String lclsSystm1;      // 분류 시스템1
-    private String lclsSystm2;      // 분류 시스템2
-    private String lclsSystm3;      // 분류 시스템3
+    private String addr1;
+    private String addr2;
+    private String areacode;
+    private String cat1;
+    private String cat2;
+    private String cat3;
+    private String contentid;
+    private String contenttypeid;
+    private String createdtime;
+    private String firstimage;
+    private String firstimage2;
+    private String cpyrhtDivCd;
+    private Double mapx;
+    private Double mapy;
+    private String mlevel;
+    private String modifiedtime;
+    private String sigungucode;
+    private String tel;
+    private String title;
+    private String zipcode;
+    private String lDongRegnCd;
+    private String lDongSignguCd;
+    private String lclsSystm1;
+    private String lclsSystm2;
+    private String lclsSystm3;
 }
