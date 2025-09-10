@@ -3,25 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title th:text="${leports.title}">Leports Example</title>
+  <title th:text="${leports.title}">레포츠 예시</title>
   <style>
     body { margin: 0; font-family: Arial, sans-serif; background-color: #fff; color: #333; }
     header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; border-bottom: 1px solid #ddd; }
     header h1 { font-size: 24px; }
     header input { padding: 5px; width: 200px; }
-    .leports-info { display: flex; padding: 20px 30px; gap: 20px; }
-    .leports-image { width: 300px; height: 200px; background: #f0f0f0; object-fit: cover; }
-    .leports-details { flex: 1; }
-    .price { font-weight: bold; font-size: 20px; margin-top: 10px; }
-    nav { display: flex; gap: 30px; padding: 10px 30px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; background: #fafafa; }
-    .program-section { padding: 20px 30px; }
-    .program { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 15px 0; }
-    .program-img { width: 100px; height: 80px; background: #e0e0e0; margin-right: 15px; }
-    .program-info { flex: 1; }
-    .btn { background: #333; color: #fff; padding: 8px 16px; border: none; cursor: pointer; }
-    .reviews { display: flex; gap: 20px; padding: 20px 30px; }
+    .hotel-info { display: flex; padding: 20px 30px; gap: 20px; }
+    .hotel-image { width: 300px; height: 200px; background: #f0f0f0; object-fit: cover; }
+    .hotel-details { flex: 1; }
+    nav { display: flex; gap: 30px; padding: 10px 30px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; background: #fafafa; cursor: pointer; }
+    .info-section, .facility-section, .review-section { padding: 20px 30px; display: none; }
+    .btn { background: #333; color: #fff; padding: 8px 16px; border: none; cursor: pointer; margin-right: 8px; border-radius: 4px; }
+    .btn.active { background: #007bff; }
+    .reviews { display: flex; gap: 20px; }
     .review { flex: 1; border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #fafafa; }
-    footer { text-align: center; padding: 20px; border-top: 1px solid #ddd; }
+    .map-container { width: 100%; height: 500px; margin-top: 16px; border-radius: 12px; border: 1px solid #eee; box-shadow: 0 1px 2px rgba(0,0,0,.03); background: #fafafa; }
+    nav span.active { font-weight: bold; text-decoration: underline; color: #000; }
+    .filter-buttons { margin-bottom: 12px; }
   </style>
 </head>
 <body>
@@ -33,55 +32,164 @@
   </div>
 </header>
 
-<section class="leports-info">
-  <!-- 레포츠 이미지 -->
-  <img th:src="${leports.firstimage}" alt="레포츠 이미지" class="leports-image">
-  <div class="leports-details">
-    <h2 th:text="${leports.title}">Leports Example</h2>
-    <p th:text="${leports.addr1} + ' | 전화: ' + ${leports.tel}">서울시 | 평점 ★★★</p>
-    <p class="price">50,000원</p> <!-- 가격 정보는 Leports 엔티티에 없으므로 임시 하드코딩 -->
+<section class="hotel-info">
+  <img th:src="${leports.firstimage}" alt="레포츠 이미지" class="hotel-image">
+  <div class="hotel-details">
+    <h2 th:text="${leports.title}"></h2>
+    <!-- 주소, 전화, 가격 제거 -->
   </div>
 </section>
 
+<input type="hidden" id="leportsId" th:value="${leports.id}">
+
 <nav>
-  <span>주요 정보</span>
-  <span>프로그램</span>
-  <span>시설&서비스</span>
-  <span>리뷰</span>
-  <span>위치</span>
+  <span data-target="info">주요 정보</span>
+  <span data-target="facility">시설&서비스</span>
+  <span data-target="review">리뷰</span>
 </nav>
 
-<!-- 프로그램 섹션 (추후 Program 엔티티 연결 가능) -->
-<section class="program-section">
-  <div class="program">
-    <div class="program-img"></div>
-    <div class="program-info">
-      <h3>수상 레포츠 체험</h3>
-      <p>카약, 카누, 패들보드 등 다양한 수상 스포츠</p>
+<!-- 주요 정보 -->
+<section class="info-section">
+  <h3>주요 정보</h3>
+  <p><strong>주소:</strong> <span th:text="${leports.addr1} + ' ' + ${leports.addr2}">제주시</span></p>
+  <p><strong>전화번호:</strong> <span th:text="${leports.tel}">054-000-0000</span></p>
+  <p><strong>지도 좌표:</strong> (<span id="mapx" th:text="${leports.mapx}">127.0</span>, <span id="mapy" th:text="${leports.mapy}">37.0</span>)</p>
+  <div id="map-info" class="map-container"></div>
+</section>
+
+<!-- 시설 & 서비스 -->
+<section class="facility-section">
+  <h3>시설 & 서비스</h3>
+  <div class="filter-buttons">
+    <button class="btn active" data-category="all">전체</button>
+    <button class="btn" data-category="accommodation">숙소</button>
+    <button class="btn" data-category="leports">레포츠</button>
+    <button class="btn" data-category="restaurant">식당</button>
+    <button class="btn" data-category="shopping">쇼핑</button>
+    <button class="btn" data-category="touristSpot">관광지</button>
+  </div>
+  <div id="map-facility" class="map-container"></div>
+</section>
+
+<!-- 리뷰 -->
+<section class="review-section">
+  <h3>리뷰</h3>
+  <div class="reviews">
+    <div class="review">
+      <h4>Nickname</h4>
+      <small>2025년 9월 9일</small>
+      <p>레포츠 근처 시설이 편리하고 즐거웠습니다.</p>
     </div>
-    <button class="btn">예약 가능 여부 확인</button>
   </div>
 </section>
 
-<nav>
-  <span>주요 정보</span>
-  <span>프로그램</span>
-  <span>시설&서비스</span>
-  <span>리뷰</span>
-  <span>위치</span>
-</nav>
+<script>
+  const tabs = document.querySelectorAll('nav span');
+  const sections = {
+    info: document.querySelector('.info-section'),
+    facility: document.querySelector('.facility-section'),
+    review: document.querySelector('.review-section')
+  };
 
-<!-- 리뷰 섹션 -->
-<section class="reviews">
-  <div class="review">
-    <h4>Nickname</h4>
-    <small>2025년 9월 9일</small>
-    <p>한강에서 카약 체험했는데 정말 재미있었어요!</p>
-  </div>
-</section>
+  function hideAllSections() {
+    Object.values(sections).forEach(sec => sec.style.display = 'none');
+  }
 
-<footer>
-  <p>더 보기 ></p>
-</footer>
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      hideAllSections();
+      const target = tab.getAttribute('data-target');
+      sections[target].style.display = 'block';
+
+      if (target === 'info') initMap('map-info');
+      if (target === 'facility') loadNearbyFacilities('all');
+    });
+  });
+
+  // 기본 활성화
+  tabs[0].click();
+
+  const KAKAO_JS_KEY = "c1a0fc126750fc75623bdc1df69dfb93"; // 실제 키로 교체
+  (function loadKakaoSDK() {
+    const src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=" +
+      encodeURIComponent(KAKAO_JS_KEY) +
+      "&autoload=false";
+    const s = document.createElement("script");
+    s.src = src;
+    s.defer = true;
+    s.onload = () => {
+      if (window.kakao && kakao.maps && kakao.maps.load) {
+        kakao.maps.load(() => {
+          initMap('map-info');
+        });
+      }
+    };
+    document.head.appendChild(s);
+  })();
+
+  function initMap(containerId) {
+    const mapX = parseFloat(document.getElementById("mapx").innerText);
+    const mapY = parseFloat(document.getElementById("mapy").innerText);
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const center = new kakao.maps.LatLng(mapY, mapX);
+    const map = new kakao.maps.Map(container, { center, level: 6 });
+    new kakao.maps.Marker({ position: center, map });
+  }
+
+  // 시설 & 서비스 탭: 주변 장소 표시
+  let markers = [];
+  function loadNearbyFacilities(filterCategory) {
+    const leportsId = document.getElementById("leportsId").value;
+    const mapX = parseFloat(document.getElementById("mapx").innerText);
+    const mapY = parseFloat(document.getElementById("mapy").innerText);
+    const container = document.getElementById('map-facility');
+    if (!container) return;
+
+    const center = new kakao.maps.LatLng(mapY, mapX);
+    const map = new kakao.maps.Map(container, { center, level: 6 });
+    new kakao.maps.Marker({ position: center, map });
+
+    // 이전 마커 삭제
+    markers.forEach(m => m.setMap(null));
+    markers = [];
+
+    fetch(`/leports/${leportsId}/nearby`)
+      .then(res => res.json())
+      .then(data => {
+        const categories = ['accommodation', 'leports', 'restaurant', 'shopping', 'touristSpot'];
+        categories.forEach(category => {
+          if (filterCategory !== 'all' && category !== filterCategory) return;
+          data[category]?.forEach(item => {
+            if (!item.mapx || !item.mapy) return;
+            const marker = new kakao.maps.Marker({
+              position: new kakao.maps.LatLng(item.mapy, item.mapx),
+              map,
+              title: item.title
+            });
+            kakao.maps.event.addListener(marker, 'click', () => {
+              window.location.href = `/${category}/view/${item.id}`;
+            });
+            markers.push(marker);
+          });
+        });
+      })
+      .catch(err => console.error(err));
+  }
+
+  // 필터 버튼 이벤트
+  document.querySelectorAll('.filter-buttons .btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-buttons .btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const category = btn.getAttribute('data-category');
+      loadNearbyFacilities(category);
+    });
+  });
+</script>
 </body>
 </html>
