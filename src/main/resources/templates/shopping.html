@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title th:text="${shopping.title}">Shopping Example</title>
+  <title th:text="${shopping.title}">쇼핑 예시</title>
   <style>
-    /* 👉 그대로 유지 (CSS는 안 건드림) */
     body { margin: 0; font-family: Arial, sans-serif; background-color: #fff; color: #333; }
     header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; border-bottom: 1px solid #ddd; }
     header h1 { font-size: 24px; }
@@ -13,76 +12,102 @@
     .hotel-info { display: flex; padding: 20px 30px; gap: 20px; }
     .hotel-image { width: 300px; height: 200px; background: #f0f0f0; object-fit: cover; }
     .hotel-details { flex: 1; }
-    .price { font-weight: bold; font-size: 20px; margin-top: 10px; }
-    nav { display: flex; gap: 30px; padding: 10px 30px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; background: #fafafa; }
-    .room-section { padding: 20px 30px; }
-    .room { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 15px 0; }
-    .room-img { width: 100px; height: 80px; background: #e0e0e0; margin-right: 15px; }
-    .room-info { flex: 1; }
-    .btn { background: #333; color: #fff; padding: 8px 16px; border: none; cursor: pointer; }
-    .reviews { display: flex; gap: 20px; padding: 20px 30px; }
-    .review { flex: 1; border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #fafafa; }
-    footer { text-align: center; padding: 20px; border-top: 1px solid #ddd; }
+    nav { display: flex; gap: 30px; padding: 10px 30px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; background: #fafafa; cursor: pointer; }
+    .info-section, .facility-section, .review-section { padding: 20px 30px; display: none; }
+    .btn { background: #333; color: #fff; padding: 8px 16px; border: none; cursor: pointer; margin-right: 8px; border-radius: 4px; }
+    .btn.active { background: #007bff; }
+    .map-container { width: 100%; height: 500px; margin-top: 16px; border-radius: 12px; border: 1px solid #eee; box-shadow: 0 1px 2px rgba(0,0,0,.03); background: #fafafa; }
+    nav span.active { font-weight: bold; text-decoration: underline; color: #000; }
+    .filter-buttons { margin-bottom: 12px; }
   </style>
 </head>
 <body>
 <header>
   <h1>Tour</h1>
-  <input type="text" placeholder="쇼핑몰을 검색해보세요.">
-  <div>
-    <button>로그인/회원가입</button>
-  </div>
+  <input type="text" placeholder="쇼핑을 검색해보세요.">
+  <div><button>로그인/회원가입</button></div>
 </header>
 
 <section class="hotel-info">
-  <!-- 쇼핑 이미지 -->
   <img th:src="${shopping.firstimage}" alt="쇼핑 이미지" class="hotel-image">
   <div class="hotel-details">
-    <h2 th:text="${shopping.title}">Shopping Example</h2>
-    <p th:text="${shopping.addr1} + ' | 전화: ' + ${shopping.tel}">서울 | 영업시간 10:00~22:00</p>
-    <p class="price">평균 20,000원</p> <!-- 가격 정보는 Shopping 엔티티에 없으므로 임시 하드코딩 -->
+    <h2 th:text="${shopping.title}"></h2>
   </div>
 </section>
 
+<input type="hidden" id="shoppingId" th:value="${shopping.id}">
+
 <nav>
-  <span>주요 정보</span>
-  <span>상품</span>
-  <span>시설&서비스</span>
-  <span>리뷰</span>
-  <span>위치</span>
+  <span data-target="info">주요 정보</span>
+  <span data-target="facility">시설&서비스</span>
+  <span data-target="review">리뷰</span>
 </nav>
 
-<!-- 상품 섹션 -->
-<section class="room-section">
-  <div class="room">
-    <div class="room-img"></div>
-    <div class="room-info">
-      <h3>대표 상품</h3>
-      <p>현지 특산품, 기념품 세트, 선물용 추천</p>
+<section class="info-section">
+  <h3>주요 정보</h3>
+  <p><strong>주소:</strong> <span th:text="${shopping.addr1} + ' ' + ${shopping.addr2}"></span></p>
+  <p><strong>전화번호:</strong> <span th:text="${shopping.tel}"></span></p>
+  <p><strong>지도 좌표:</strong> (<span id="mapx" th:text="${shopping.mapx}"></span>, <span id="mapy" th:text="${shopping.mapy}"></span>)</p>
+  <div id="map-info" class="map-container"></div>
+</section>
+
+<section class="facility-section">
+  <h3>시설 & 서비스</h3>
+  <div class="filter-buttons">
+    <button class="btn active" data-category="all">전체</button>
+    <button class="btn" data-category="accommodation">숙소</button>
+    <button class="btn" data-category="leports">레포츠</button>
+    <button class="btn" data-category="restaurant">식당</button>
+    <button class="btn" data-category="shopping">쇼핑</button>
+    <button class="btn" data-category="touristSpot">관광지</button>
+  </div>
+  <div id="map-facility" class="map-container"></div>
+</section>
+
+<section class="review-section">
+  <h3>리뷰</h3>
+  <div class="reviews">
+    <div class="review">
+      <h4>Nickname</h4>
+      <small>2025년 9월 9일</small>
+      <p>다양한 상품이 있어 구경하기 좋았습니다.</p>
     </div>
-    <button class="btn">구매 가능 여부 확인</button>
   </div>
 </section>
 
-<nav>
-  <span>주요 정보</span>
-  <span>상품</span>
-  <span>시설&서비스</span>
-  <span>리뷰</span>
-  <span>위치</span>
-</nav>
+<script>
+  const tabs = document.querySelectorAll('nav span');
+  const sections = { info: document.querySelector('.info-section'), facility: document.querySelector('.facility-section'), review: document.querySelector('.review-section') };
+  function hideAllSections() { Object.values(sections).forEach(sec=>sec.style.display='none'); }
+  tabs.forEach(tab=>{ tab.addEventListener('click',()=>{ tabs.forEach(t=>t.classList.remove('active')); tab.classList.add('active'); hideAllSections(); const target=tab.getAttribute('data-target'); sections[target].style.display='block'; if(target==='info') initMap('map-info'); if(target==='facility') loadNearbyFacilities('all'); }); });
+  tabs[0].click();
 
-<!-- 리뷰 섹션 -->
-<section class="reviews">
-  <div class="review">
-    <h4>Nickname</h4>
-    <small>2025년 9월 10일</small>
-    <p>쇼핑몰에서 가까워서 방문하기 편했고, 상품 종류도 다양해서 만족스러웠어요.</p>
-  </div>
-</section>
+  const KAKAO_JS_KEY="c1a0fc126750fc75623bdc1df69dfb93";
+  (function loadKakaoSDK(){ const s=document.createElement("script"); s.src="https://dapi.kakao.com/v2/maps/sdk.js?appkey="+encodeURIComponent(KAKAO_JS_KEY)+"&autoload=false"; s.defer=true; s.onload=()=>{ if(window.kakao&&kakao.maps&&kakao.maps.load){ kakao.maps.load(()=>{ initMap('map-info'); }); } }; document.head.appendChild(s); })();
 
-<footer>
-  <p>더 보기 ></p>
-</footer>
+  function initMap(containerId){ const mapX=parseFloat(document.getElementById("mapx").innerText); const mapY=parseFloat(document.getElementById("mapy").innerText); const container=document.getElementById(containerId); if(!container)return; const center=new kakao.maps.LatLng(mapY,mapX); const map=new kakao.maps.Map(container,{center,level:6}); new kakao.maps.Marker({position:center,map}); }
+
+  let markers=[];
+  function loadNearbyFacilities(filterCategory){
+    const id=document.getElementById("shoppingId").value;
+    const mapX=parseFloat(document.getElementById("mapx").innerText);
+    const mapY=parseFloat(document.getElementById("mapy").innerText);
+    const container=document.getElementById("map-facility");
+    if(!container)return;
+    const center=new kakao.maps.LatLng(mapY,mapX);
+    const map=new kakao.maps.Map(container,{center,level:6});
+    new kakao.maps.Marker({position:center,map});
+    markers.forEach(m=>m.setMap(null));
+    markers=[];
+    fetch(`/shopping/${id}/nearby`).then(res=>res.json()).then(data=>{
+      Object.keys(data).forEach(category=>{
+        if(filterCategory!=='all'&&category!==filterCategory)return;
+        data[category].forEach(item=>{ if(!item.mapx||!item.mapy)return; const marker=new kakao.maps.Marker({position:new kakao.maps.LatLng(item.mapy,item.mapx), map, title:item.title }); kakao.maps.event.addListener(marker,'click',()=>{ window.location.href=`/${category}/view/${item.id}`; }); markers.push(marker); });
+      });
+    }).catch(err=>console.error(err));
+  }
+
+  document.querySelectorAll('.filter-buttons .btn').forEach(btn=>{ btn.addEventListener('click',()=>{ document.querySelectorAll('.filter-buttons .btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); loadNearbyFacilities(btn.getAttribute('data-category')); }); });
+</script>
 </body>
 </html>

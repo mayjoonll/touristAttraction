@@ -24,12 +24,12 @@ public class AccommodationController {
 
     @PostMapping
     public Accommodation create(@RequestBody Accommodation spot) {
-        return service.saveTouristSpot(spot);
+        return service.saveAccommodation(spot);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        service.deleteTouristSpot(id);
+        service.deleteAccommodation(id);
     }
 
     // ================= 뷰 페이지 =================
