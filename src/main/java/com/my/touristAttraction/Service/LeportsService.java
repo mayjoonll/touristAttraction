@@ -55,5 +55,12 @@ public class LeportsService {
         return R * c;
     }
 
+    public List<Leports> getAll() {
+        return leportsRepository.findAll();
+    }
 
+
+    public List<Leports> findAll() {
+        return leportsRepository.findAll();
+    }
 }

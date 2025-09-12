@@ -3,6 +3,8 @@ package com.my.touristAttraction.repository;
 
 import com.my.touristAttraction.entity.Accommodation;
 import com.my.touristAttraction.entity.Leports;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +21,8 @@ public interface AccommodationRepository extends JpaRepository<Accommodation, Lo
     List<Leports> findNearby(@Param("lat") Double lat,
                              @Param("lng") Double lng,
                              @Param("distance") Double distance);
+
+    // AccommodationRepository.java에 추가
+    Page<Accommodation> findByTitleContainingIgnoreCaseOrAddr1ContainingIgnoreCase(
+            String title, String addr1, Pageable pageable);
 }
