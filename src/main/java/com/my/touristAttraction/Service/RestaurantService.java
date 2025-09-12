@@ -3,6 +3,7 @@ package com.my.touristAttraction.Service;
 import com.my.touristAttraction.entity.Accommodation;
 import com.my.touristAttraction.entity.Leports;
 import com.my.touristAttraction.entity.Restaurant;
+import com.my.touristAttraction.entity.TouristSpot;
 import com.my.touristAttraction.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,5 +54,13 @@ public class RestaurantService {
                 * Math.sin(dLon/2) * Math.sin(dLon/2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return R * c;
+    }
+
+    public List<Restaurant> getAll() {
+        return restaurantRepository.findAll();
+    }
+
+    public List<Restaurant> findAll() {
+        return restaurantRepository.findAll();
     }
 }

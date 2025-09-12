@@ -2,6 +2,7 @@ package com.my.touristAttraction.Service;
 
 import com.my.touristAttraction.entity.Restaurant;
 import com.my.touristAttraction.entity.Shopping;
+import com.my.touristAttraction.entity.TouristSpot;
 import com.my.touristAttraction.repository.ShoppingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,5 +55,12 @@ public class ShoppingService {
         return R * c;
     }
 
+    public List<Shopping> getAll() {
+        return shoppingRepository.findAll();
+    }
 
+
+    public List<Shopping> findAll() {
+        return shoppingRepository.findAll();
+    }
 }

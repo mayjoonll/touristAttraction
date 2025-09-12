@@ -54,4 +54,12 @@ public class TouristSpotService {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return R * c;
     }
+
+    public List<TouristSpot> getAll() {
+        return touristSpotRepository.findAll();
+    }
+
+    public List<TouristSpot> findAll() {
+        return touristSpotRepository.findAll();
+    }
 }
